@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Skeleton">
 <meta name="theme-color" content="#edf1f4">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <title>Skeleton Log</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
@@ -226,13 +228,13 @@ textarea.in { resize: vertical; min-height: 64px; }
   /* ---------- Estado ---------- */
   var S = { tracks: {}, runs: {}, trackimgs: {} };
   var UI = { tab: 'resumen', track: null, map: null, loading: false, pending: 0, err: false, role: null, code: '', gateMsg: '', ed: null, ro: null, imp: null, trk: null, mapConfirm: false, confirmTrack: null };
-  var EDITS = ['new', 'newtrack', 'edittrack', 'savetrack', 'deltrack', 'mapdel', 'impgo', 'impcancel', 'save', 'del', 'status', 'pickstart', 'ice'];
+  var EDITS = ['new', 'newtrack', 'edittrack', 'savetrack', 'deltrack', 'mapdel', 'impgo', 'impcancel', 'save', 'del', 'status', 'pickstart', 'ice', 'type'];
   var ICE = '<svg class="ico" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9.5 3.8L12 6l2.5-2.2M9.5 20.2L12 18l2.5 2.2"/></svg>';
   function iceIcon(name) {
-    var n = norm(name), c = n === 'bueno' ? 'var(--good)' : (n === 'regular' || n === 'escarchado') ? 'var(--amber)' : n === 'malo' ? 'var(--bad)' : 'var(--muted)';
+    var n = norm(name), c = n === 'bueno' ? 'var(--good)' : (n === 'sticky' || n === 'frosted') ? 'var(--amber)' : n === 'malo' ? 'var(--bad)' : 'var(--muted)';
     return ICE.replace('<svg ', '<svg style="color:' + c + '" ');
   }
-  var DEFAULT_ICE = ['Bueno', 'Regular', 'Escarchado', 'Malo'];
+  var DEFAULT_ICE = ['Bueno', 'Sticky', 'Frosted', 'Malo'];
 
   /* ---------- Formatos ---------- */
   function fmt(t) {
@@ -258,6 +260,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     return long ? s + ' ' + p[0] : s;
   }
   function fmtShort(iso) { var p = iso.split('-'); return +p[2] + '/' + +p[1]; }
+  function isComp(r) { return r.type === 'competicion'; }
 
   /* ---------- Datos derivados ---------- */
   function trackList() { return Object.keys(S.tracks).map(function (k) { return S.tracks[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }
@@ -537,6 +540,7 @@ textarea.in { resize: vertical; min-height: 64px; }
           if (isRef && pb != null && f !== pb) dl = fmtD(f - pb);
         }
         var meta = [];
+        if (isComp(r)) meta.push('<b>Competición</b>');
         if (r.speed != null) meta.push(fmt1(r.speed) + ' km/h');
         if (r.ice) meta.push('<span class="ice">' + iceIcon(r.ice) + esc(r.ice) + '</span>');
         if (r.temp != null) meta.push(r.temp + ' ºC');
@@ -560,7 +564,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       h += '<tr><td>' + esc(name) + '</td><td class="n mono">' + acum + '</td><td class="n mono">' + (sv[i] != null ? fmt(sv[i]) : '–') + '</td></tr>';
     });
     h += '</tbody></table></div>';
-    var info = [['Salida', r.start || '–'], ['Resultado', stTxt], ['Vel. máx', r.speed != null ? fmt1(r.speed) + ' km/h' : '–'], ['Temperatura', r.temp != null ? r.temp + ' ºC' : '–'], ['Hielo', r.ice || '–'], ['Sensaciones', r.notes || '–']];
+    var info = [['Tipo', isComp(r) ? 'Competición' : 'Entreno'], ['Salida', r.start || '–'], ['Resultado', stTxt], ['Vel. máx', r.speed != null ? fmt1(r.speed) + ' km/h' : '–'], ['Temperatura', r.temp != null ? r.temp + ' ºC' : '–'], ['Hielo', r.ice || '–'], ['Sensaciones', r.notes || '–']];
     h += '<div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px">' + info.map(function (x) { return '<span class="sub">' + x[0] + '</span><span>' + esc(x[1]) + '</span>'; }).join('') + '</div>';
     return h;
   }
@@ -570,10 +574,10 @@ textarea.in { resize: vertical; min-height: 64px; }
     var rs = runsOf(t.id), last = rs[rs.length - 1], date = todayIso();
     var session = 1, n = 1, same = rs.filter(function (r) { return r.date === date; });
     if (same.length) { var ls = same[same.length - 1]; session = ls.session || 1; n = (ls.n || 0) + 1; }
-    return { id: null, date: date, session: session, n: n, start: (last && (t.starts || []).indexOf(last.start) >= 0) ? last.start : (t.starts && t.starts[0]) || '', status: 'ok', t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
+    return { id: null, date: date, session: session, n: n, start: (last && (t.starts || []).indexOf(last.start) >= 0) ? last.start : (t.starts && t.starts[0]) || '', status: 'ok', type: 'entreno', t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
   }
   function draftFrom(r, t) {
-    return { id: r.id, date: r.date, session: r.session || 1, n: r.n, start: r.start || '', status: r.status, t: t.splits.map(function (_, i) { var v = r.times && r.times[i]; return v == null ? '' : String(v); }), speed: r.speed == null ? '' : String(r.speed), temp: r.temp == null ? '' : String(r.temp), ice: r.ice || '', notes: r.notes || '', err: '', confirmDel: false };
+    return { id: r.id, date: r.date, session: r.session || 1, n: r.n, start: r.start || '', status: r.status, type: isComp(r) ? 'competicion' : 'entreno', t: t.splits.map(function (_, i) { var v = r.times && r.times[i]; return v == null ? '' : String(v); }), speed: r.speed == null ? '' : String(r.speed), temp: r.temp == null ? '' : String(r.temp), ice: r.ice || '', notes: r.notes || '', err: '', confirmDel: false };
   }
   function openSheet() { $('sheetbg').hidden = false; }
   function openEditor(d) { UI.ro = null; UI.ed = d; UI.trk = null; UI.map = null; drawSheet(); openSheet(); var f = $('f-t0'); if (f && !d.id) f.focus(); }
@@ -592,6 +596,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var ss = (t.starts || []).slice();
     if (d.start && ss.indexOf(d.start) < 0) ss.push(d.start);
     if (ss.length) h += '<div><div class="eyebrow" style="margin-bottom:6px">SALIDA</div><div class="chips" role="group" aria-label="Salida">' + ss.map(function (x) { return '<button class="chip" type="button" data-pickstart="' + esc(x) + '" aria-pressed="' + (d.start === x) + '">' + esc(x) + '</button>'; }).join('') + '</div></div>';
+    h += '<div><div class="eyebrow" style="margin-bottom:6px">TIPO</div><div class="seg" role="group" aria-label="Tipo" style="grid-template-columns:1fr 1fr"><button type="button" data-type="entreno" aria-pressed="' + (d.type !== 'competicion') + '">Entreno</button><button type="button" data-type="competicion" aria-pressed="' + (d.type === 'competicion') + '">Competición</button></div></div>';
     h += '<div class="seg" role="group" aria-label="Resultado"><button type="button" data-status="ok" aria-pressed="' + (d.status === 'ok') + '">Con tiempo</button><button type="button" class="bad" data-status="dnf" aria-pressed="' + (d.status === 'dnf') + '">DNF / caída</button><button type="button" data-status="nt" aria-pressed="' + (d.status === 'nt') + '">Sin tiempo</button></div>';
     if (d.status !== 'nt') {
       h += '<div><div class="tgrid"><span class="h">Punto</span><span class="h" style="text-align:right">Tiempo acum.</span><span class="h" style="text-align:right">Parcial</span>';
@@ -667,10 +672,10 @@ textarea.in { resize: vertical; min-height: 64px; }
     if (isNaN(speed) || isNaN(temp)) return fail('Revisa la velocidad o la temperatura.');
     var dup = runsOf(t.id).some(function (r) { return r.id !== d.id && r.date === d.date && (r.session || 1) === ses && r.n === n; });
     if (dup && !d.dupOk) { d.dupOk = true; return fail('Ya existe el descenso #' + n + ' de ese día y sesión. Pulsa Guardar otra vez si es correcto.'); }
-    var doc = { id: d.id || uid(), trackId: t.id, date: d.date, session: ses, n: n, start: d.start, times: times, status: d.status, speed: speed, temp: temp, ice: d.ice || '', notes: d.notes.trim() };
+    var doc = { id: d.id || uid(), trackId: t.id, date: d.date, session: ses, n: n, start: d.start, type: d.type === 'competicion' ? 'competicion' : 'entreno', times: times, status: d.status, speed: speed, temp: temp, ice: d.ice || '', notes: d.notes.trim() };
     putDoc('runs', doc);
     if (mode === 'again' && !d.id) {
-      UI.ed = { id: null, date: d.date, session: ses, n: n + 1, start: d.start, status: 'ok', t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
+      UI.ed = { id: null, date: d.date, session: ses, n: n + 1, start: d.start, status: 'ok', type: d.type, t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
       drawSheet(); toast('Descenso #' + n + ' guardado'); var f = $('f-t0'); if (f) f.focus();
     } else { closeSheet(); toast('Descenso guardado'); }
     render();
@@ -740,7 +745,7 @@ textarea.in { resize: vertical; min-height: 64px; }
   function datosHtml() {
     var tl = trackList(), ed = UI.role === 'editor';
     var h = '<div class="dgrid"><section class="card"><h2>Exportar</h2><p class="hint">Descarga un libro .xlsx con una hoja por pista y una hoja SUMMIT con el resumen.</p><button class="btn primary" type="button" data-export="1"' + (tl.length ? '' : ' disabled') + '>Descargar .xlsx</button><span class="sub" id="ex-msg"></span></section>';
-    if (ed) h += '<section class="card"><h2>Importar</h2><p class="hint">Lee cada hoja con columnas Fecha, Run, Start, tiempos, Top Speed, Tº, Estado Hielo y Sensaciones. Antes de guardar verás qué se añade.</p><label class="btn" for="impfile">Elegir archivo .xlsx</label><input type="file" id="impfile" accept=".xlsx,.xls,.xlsm,.csv" hidden></section>';
+    if (ed) h += '<section class="card"><h2>Importar</h2><p class="hint">Lee cada hoja con columnas Fecha, Run, Start, tiempos, Top Speed, Tº, Estado Hielo, Sensaciones y Tipo (opcional). Antes de guardar verás qué se añade.</p><label class="btn" for="impfile">Elegir archivo .xlsx</label><input type="file" id="impfile" accept=".xlsx,.xls,.xlsm,.csv" hidden></section>';
     h += '<section class="card"><h2>Cuenta</h2><p class="hint">Este dispositivo está en modo ' + (ed ? '<b>editor</b>' : '<b>solo lectura</b>') + '.</p><button class="btn" type="button" data-logout="1">Cambiar código</button></section></div>';
     if (ed && UI.imp) h += importHtml();
     h += '<section class="card"><h2 style="margin-bottom:6px">Pistas</h2>';
@@ -761,9 +766,9 @@ textarea.in { resize: vertical; min-height: 64px; }
     used[n] = 1; return n;
   }
   function trackSheet(t) {
-    var runs = runsOf(t.id), k = t.splits.length, ws = {}, sb = 3 + k + 4, r = 0, maxC = sb + k - 1;
+    var runs = runsOf(t.id), k = t.splits.length, ws = {}, sb = 3 + k + 5, r = 0, maxC = sb + k - 1;
     var put = function (row, c, v, extra) { var cell = typeof v === 'number' ? { t: 'n', v: v } : { t: 's', v: v }; if (extra) Object.assign(cell, extra); ws[XLSX.utils.encode_cell({ r: row, c: c })] = cell; };
-    var hdr = ['Fecha', 'Run', 'Start'].concat(t.splits, ['Top Speed (km/h)', 'Tº', 'Estado Hielo', 'Sensaciones'], t.splits);
+    var hdr = ['Fecha', 'Run', 'Start'].concat(t.splits, ['Top Speed (km/h)', 'Tº', 'Estado Hielo', 'Sensaciones', 'Tipo'], t.splits);
     hdr.forEach(function (x, c) { put(0, c, x); });
     r = 1; var prev = null;
     runs.forEach(function (run) {
@@ -782,6 +787,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       if (run.temp != null) put(r, 3 + k + 1, run.temp);
       if (run.ice) put(r, 3 + k + 2, run.ice);
       if (run.notes) put(r, 3 + k + 3, run.notes);
+      put(r, 3 + k + 4, isComp(run) ? 'Competición' : 'Entreno');
       var sec = sectors(run), er = r + 1;
       for (var j = 0; j < k; j++) {
         var v2 = sec[j];
@@ -791,7 +797,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       prev = run; r++;
     });
     ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(r - 1, 0), c: maxC } });
-    ws['!cols'] = hdr.map(function (_, c) { return { wch: c === 3 + k + 3 ? 60 : c === 0 ? 11 : 10 }; });
+    ws['!cols'] = hdr.map(function (_, c) { return { wch: c === 3 + k + 3 ? 60 : c === 3 + k + 4 ? 13 : c === 0 ? 11 : 10 }; });
     return ws;
   }
   function buildWorkbook() {
@@ -799,7 +805,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     tl.forEach(function (t) { t._sheet = safeSheet(t.name, used); t._ws = trackSheet(t); });
     ['', 'Pista', 'Personal Best', 'Virtual Best', 'MAX Speed', 'RUNS', 'Crash'].forEach(function (h, c) { if (h) sum[XLSX.utils.encode_cell({ r: 0, c: c })] = { t: 's', v: h }; });
     tl.forEach(function (t, i) {
-      var st = stats(t, t.ref || ''), k = t.splits.length, sb = 3 + k + 4, q = "'" + t._sheet + "'!", last = 2000, r = i + 1;
+      var st = stats(t, t.ref || ''), k = t.splits.length, sb = 3 + k + 5, q = "'" + t._sheet + "'!", last = 2000, r = i + 1;
       var mk = function (c, v, f) { var cell = v == null ? { t: 's', v: '' } : typeof v === 'number' ? { t: 'n', v: v } : { t: 's', v: v }; if (f) cell.f = f; sum[XLSX.utils.encode_cell({ r: r, c: c })] = cell; };
       var fin = colName(3 + k - 1), sectorMins = [];
       var cr = q + 'C2:C' + last, mn = function (rg) { return t.ref ? '_xlfn.MINIFS(' + rg + ',' + cr + ',"' + t.ref.replace(/"/g, '""') + '")' : 'MIN(' + rg + ')'; };
@@ -848,7 +854,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var sp = -1; for (i = 3; i < H.length; i++) if (/speed|velocidad/.test(H[i])) { sp = i; break; }
     if (sp < 5) return null;
     var find = function (re, from) { for (var j = from; j < H.length; j++) if (re.test(H[j])) return j; return -1; };
-    var cT = find(/^t[o]?$|temp/, sp + 1), cI = find(/hielo|ice/, sp + 1), cN = find(/sensac|coment|notas|notes/, sp + 1);
+    var cT = find(/^t[o]?$|temp/, sp + 1), cI = find(/hielo|ice/, sp + 1), cN = find(/sensac|coment|notas|notes/, sp + 1), cTipo = find(/^tipo$/, sp + 1);
     if (cT < 0) cT = sp + 1; if (cI < 0) cI = sp + 2; if (cN < 0) cN = sp + 3;
     var splits = []; for (i = 3; i < sp; i++) splits.push(cleanSplitName(rows[hi][i], i - 3));
     var k = splits.length, out = { name: name, splits: splits, starts: [], runs: [], skipped: 0 }, date = null, session = 1, brk = false, hasData = false;
@@ -873,8 +879,9 @@ textarea.in { resize: vertical; min-height: 64px; }
       var sv2 = typeof r[sp] === 'number' ? r[sp] : parseNum(r[sp]);
       var tv = typeof r[cT] === 'number' ? r[cT] : parseNum(r[cT]);
       var st = cellStr(r[2]);
+      var tipo = cTipo >= 0 && /compet/.test(norm(r[cTipo])) ? 'competicion' : 'entreno';
       if (st && out.starts.indexOf(st) < 0) out.starts.push(st);
-      out.runs.push({ date: date, session: session, n: n, start: st, times: times, status: status, speed: (sv2 == null || isNaN(sv2)) ? null : sv2, temp: (tv == null || isNaN(tv)) ? null : tv, ice: cellStr(r[cI]), notes: cellStr(r[cN]) });
+      out.runs.push({ date: date, session: session, n: n, start: st, type: tipo, times: times, status: status, speed: (sv2 == null || isNaN(sv2)) ? null : sv2, temp: (tv == null || isNaN(tv)) ? null : tv, ice: cellStr(r[cI]), notes: cellStr(r[cN]) });
     }
     return out.runs.length ? out : null;
   }
@@ -979,6 +986,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     if (d.deltrack) { if (UI.confirmTrack === d.deltrack) { UI.confirmTrack = null; deleteTrack(d.deltrack); } else { UI.confirmTrack = d.deltrack; render(); } return; }
     if (UI.ed) {
       if (d.status) { readDraft(); UI.ed.status = d.status; drawSheet(); return; }
+      if (d.type !== undefined) { readDraft(); UI.ed.type = d.type; drawSheet(); return; }
       if (d.pickstart !== undefined) { readDraft(); UI.ed.start = d.pickstart; drawSheet(); return; }
       if (d.ice !== undefined) { readDraft(); UI.ed.ice = UI.ed.ice === d.ice ? '' : d.ice; drawSheet(); return; }
       if (d.save) { saveDraft(d.save); return; }
@@ -1036,6 +1044,9 @@ textarea.in { resize: vertical; min-height: 64px; }
   render();
   boot();
 })();
+</script>
+<script>
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
 </script>
 </body>
 </html>
