@@ -53,7 +53,7 @@ button { cursor: pointer; }
 .sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--good); }
 .sync.local::before { background: var(--s1); }
 .sync.busy::before { background: var(--accent); }
-.trackpick { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+.trackpick { display: flex; gap: 8px; align-items: center; }
 .trackpick select { flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font-weight: 600; }
 .tabs { display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid var(--line); }
 .tab { background: none; border: 0; padding: 10px 14px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -1px; }
@@ -91,7 +91,8 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 22px; text-t
 .legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; align-items: center; }
 .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; background: var(--c); }
 .legend i.lg-line { width: 18px; height: 0; border-radius: 0; background: none; border-top: 2px dashed var(--c); vertical-align: 3px; }
-.lg-x { color: var(--bad); font-size: 15px; margin-right: 5px; line-height: 1; }
+.legend i.lg-hollow { background: none; border: 2px solid var(--accent); }
+.lg-x { color: var(--bad); font-size: 14px; margin-right: 5px; line-height: 1; }
 .hit { cursor: pointer; outline: none; }
 .hit:focus-visible circle:nth-of-type(2) { stroke: var(--accent); stroke-width: 2.5; }
 #chart { width: 100%; }
@@ -128,6 +129,31 @@ th.n, td.n { text-align: right; }
 .empty { text-align: center; padding: 40px 16px; color: var(--muted); display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .empty h2 { color: var(--ink); }
 
+/* pistas */
+.tlist { display: flex; flex-direction: column; gap: 10px; }
+.tcard { position: relative; display: flex; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; }
+.tcard:hover { border-color: var(--accent); }
+.tthumb { flex: none; width: 96px; height: 72px; border-radius: 8px; background: #202321; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.tthumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.thumbbtn { border: 0; background: none; padding: 0; width: 100%; height: 100%; }
+.nothumb { color: #8ea2b1; font-size: 11px; text-align: center; padding: 0 6px; }
+.tinfo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.tcard.ed .tinfo { padding-right: 30px; }
+.tname { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.tname b { font-family: var(--font-display); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flag { width: 20px; height: 15px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px var(--line); flex: none; }
+.tstats { display: flex; gap: 22px; flex-wrap: wrap; }
+.tstats > span { display: flex; flex-direction: column; gap: 2px; }
+.tstats b { font-size: 17px; font-weight: 600; }
+.kebab { position: absolute; top: 6px; right: 6px; }
+.kbtn { background: none; border: 0; padding: 6px; border-radius: 8px; color: var(--muted); display: flex; }
+.kbtn:hover { background: var(--surface-2); color: var(--ink); }
+.kmenu { position: absolute; top: 100%; right: 0; z-index: 8; min-width: 170px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.22); overflow: hidden; }
+.kmenu button { display: block; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); padding: 11px 14px; font-weight: 600; font-size: 14px; }
+.kmenu button:first-child { border-top: 0; }
+.kmenu button:hover { background: var(--surface-2); }
+.kmenu button.danger { color: var(--bad); }
+
 .fab { position: fixed; right: max(16px, env(safe-area-inset-right,0px)); bottom: calc(16px + env(safe-area-inset-bottom,0px)); z-index: 6; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 999px; padding: 14px 22px; font-weight: 600; font-size: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
 
 .bg { position: fixed; inset: 0; z-index: 20; background: rgba(5,12,18,.55); display: flex; align-items: flex-end; justify-content: center; }
@@ -162,7 +188,7 @@ textarea.in { resize: vertical; min-height: 64px; }
 .hint { font-size: 13px; color: var(--muted); margin: 0; }
 .foot { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .foot .sp { flex: 1; }
-.mapbox { background: #202321; border-radius: 10px; display: flex; justify-content: center; padding: 12px; min-height: 160px; align-items: center; }
+.mapbox { background: #202321; border-radius: 10px; display: flex; justify-content: center; padding: 12px; min-height: 120px; align-items: center; }
 .mapbox img { max-width: 100%; max-height: 62vh; display: block; }
 
 .gate { max-width: 440px; margin: 32px auto 0; display: flex; flex-direction: column; gap: 12px; }
@@ -170,12 +196,9 @@ textarea.in { resize: vertical; min-height: 64px; }
 
 .dgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .dgrid .card { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-.drop { border: 1.5px dashed var(--line); border-radius: 10px; padding: 18px; text-align: center; width: 100%; color: var(--muted); }
 .imp { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 .impsheet { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-2); }
 .impsheet h4 { margin: 0; font-size: 15px; }
-.trk { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); width: 100%; flex-wrap: wrap; }
-.trk:first-of-type { border-top: 0; }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom,0px)); z-index: 30; background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; max-width: calc(100% - 32px); }
 
 @media (max-width: 560px) {
@@ -187,6 +210,9 @@ textarea.in { resize: vertical; min-height: 64px; }
   .strip .v { font-size: 24px; }
   .dgrid { grid-template-columns: 1fr; }
   .tgrid { grid-template-columns: 1fr 96px 64px; }
+  .tabs { gap: 0; }
+  .tab { flex: 1; padding: 10px 6px; font-size: 14px; text-align: center; }
+  .tthumb { width: 84px; height: 64px; }
 }
 </style>
 </head>
@@ -194,10 +220,10 @@ textarea.in { resize: vertical; min-height: 64px; }
 <div class="wrap">
   <header class="top">
     <div class="brand"><h1>Skeleton Log</h1><span class="sp"></span><span class="sync" id="sync"></span></div>
-    <div class="trackpick" id="trackpick"></div>
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" data-tab="resumen">Resumen</button>
-      <button class="tab" role="tab" data-tab="diario">Diario</button>
+      <button class="tab" role="tab" data-tab="descensos">Descensos</button>
+      <button class="tab" role="tab" data-tab="pistas">Pistas</button>
       <button class="tab" role="tab" data-tab="datos">Datos</button>
     </nav>
   </header>
@@ -212,12 +238,13 @@ textarea.in { resize: vertical; min-height: 64px; }
 (function () {
   'use strict';
 
-  /* ====== CONFIGURACIÓN: cambia estos dos valores ====== */
+  /* ====== CONFIGURACIÓN ====== */
   var CFG = {
     url: 'https://jvugbevqptihwfetuqwx.supabase.co',
     key: 'sb_publishable_hAp0p3d9h9_Hu3VEbVoZ9g_uaNDXfSh'
   };
   var KEY = 'skeleton-log.code';
+  var TABS = ['resumen', 'descensos', 'pistas', 'datos'];
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -225,11 +252,22 @@ textarea.in { resize: vertical; min-height: 64px; }
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
   function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
 
+  /* ---------- Países ---------- */
+  var CC = ['ad','ar','au','at','be','br','bg','ca','cl','cn','hr','cz','dk','ee','fi','fr','de','gb','gr','hu','ie','it','jp','kr','lv','li','lt','lu','mx','nl','nz','no','pl','pt','ro','ru','rs','sk','si','es','se','ch','tr','ua','us','by','kz','cy','is','ba','me','mk','al','ge','am','il','za','in','co','ve','pe','uy','tw','mc','sm'];
+  var REG = null; try { REG = (window.Intl && Intl.DisplayNames) ? new Intl.DisplayNames(['es'], { type: 'region' }) : null; } catch (e) {}
+  function cname(c) { try { return REG ? REG.of(c.toUpperCase()) : c.toUpperCase(); } catch (e) { return c.toUpperCase(); } }
+  var COUNTRIES = CC.map(function (c) { return { c: c, n: cname(c) }; }).sort(function (a, b) { return a.n.localeCompare(b.n, 'es'); });
+  function flagHtml(code) {
+    if (!code) return '';
+    return '<img class="flag" src="https://flagcdn.com/w40/' + esc(code) + '.png" srcset="https://flagcdn.com/w80/' + esc(code) + '.png 2x" width="20" height="15" alt="' + esc(cname(code)) + '" onerror="this.remove()">';
+  }
+
   /* ---------- Estado ---------- */
   var S = { tracks: {}, runs: {}, trackimgs: {} };
-  var UI = { tab: 'resumen', track: null, map: null, loading: false, pending: 0, err: false, role: null, code: '', gateMsg: '', ed: null, ro: null, imp: null, trk: null, mapConfirm: false, confirmTrack: null };
-  var EDITS = ['new', 'newtrack', 'edittrack', 'savetrack', 'deltrack', 'mapdel', 'impgo', 'impcancel', 'save', 'del', 'status', 'pickstart', 'ice', 'type'];
+  var UI = { tab: 'resumen', track: null, map: null, loading: false, pending: 0, err: false, role: null, code: '', gateMsg: '', ed: null, ro: null, imp: null, trk: null, confirmTrack: null, menu: null };
+  var EDITS = ['new', 'newtrack', 'edittrack', 'savetrack', 'deltrack', 'impgo', 'impcancel', 'save', 'del', 'status', 'pickstart', 'ice', 'type', 'menu', 'tfimgdel'];
   var ICE = '<svg class="ico" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9.5 3.8L12 6l2.5-2.2M9.5 20.2L12 18l2.5 2.2"/></svg>';
+  var DOTS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
   function iceIcon(name) {
     var n = norm(name), c = n === 'bueno' ? 'var(--good)' : (n === 'sticky' || n === 'frosted') ? 'var(--amber)' : n === 'malo' ? 'var(--bad)' : 'var(--muted)';
     return ICE.replace('<svg ', '<svg style="color:' + c + '" ');
@@ -259,7 +297,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var s = d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }).replace(/\./g, '');
     return long ? s + ' ' + p[0] : s;
   }
-  function fmtShort(iso) { var p = iso.split('-'); return +p[2] + '/' + +p[1]; }
+  function fmtFull(iso) { var p = iso.split('-'); return pad2(+p[2]) + '/' + pad2(+p[1]) + '/' + p[0]; }
   function isComp(r) { return r.type === 'competicion'; }
 
   /* ---------- Datos derivados ---------- */
@@ -286,9 +324,9 @@ textarea.in { resize: vertical; min-height: 64px; }
   }
   function stats(t, recStart) {
     var recs = runsOf(t.id).filter(function (r) { return !recStart || r.start === recStart; });
-    var st = { runs: recs.length, dnf: 0, speed: null, pb: null, pbRun: null, vb: null, best: [], avg: [], bestRun: [] };
-    var k = t.splits.length, sums = [], cnt = [];
-    for (var i = 0; i < k; i++) { st.best.push(null); st.bestRun.push(null); sums.push(0); cnt.push(0); }
+    var st = { runs: recs.length, dnf: 0, speed: null, pb: null, pbRun: null, vb: null, best: [], bestRun: [] };
+    var k = t.splits.length;
+    for (var i = 0; i < k; i++) { st.best.push(null); st.bestRun.push(null); }
     recs.forEach(function (r) {
       if (r.status === 'dnf') st.dnf++;
       if (r.speed != null && (st.speed == null || r.speed > st.speed)) st.speed = r.speed;
@@ -296,11 +334,9 @@ textarea.in { resize: vertical; min-height: 64px; }
       if (f != null && (st.pb == null || f < st.pb)) { st.pb = f; st.pbRun = r; }
       sectors(r).forEach(function (s, i) {
         if (s == null || i >= k) return;
-        sums[i] += s; cnt[i]++;
         if (st.best[i] == null || s < st.best[i]) { st.best[i] = s; st.bestRun[i] = r; }
       });
     });
-    st.avg = sums.map(function (s, i) { return cnt[i] ? s / cnt[i] : null; });
     if (k && st.best.every(function (b) { return b != null; })) st.vb = Math.round(st.best.reduce(function (a, b) { return a + b; }, 0) * 1000) / 1000;
     return st;
   }
@@ -394,7 +430,7 @@ textarea.in { resize: vertical; min-height: 64px; }
   }
   function logout() {
     try { localStorage.removeItem(KEY); } catch (e) {}
-    UI.code = ''; UI.role = null; UI.gateMsg = ''; UI.loading = false; UI.tab = 'resumen';
+    UI.code = ''; UI.role = null; UI.gateMsg = ''; UI.loading = false; UI.tab = 'resumen'; UI.menu = null;
     S = { tracks: {}, runs: {}, trackimgs: {} }; UI.track = null; closeSheet(); render();
   }
   function boot() {
@@ -425,29 +461,60 @@ textarea.in { resize: vertical; min-height: 64px; }
       '<div class="err" id="gerr">' + esc(UI.gateMsg) + '</div>' +
       '<button class="btn primary" type="button" data-entercode="1">Entrar</button></section>';
   }
-  function emptyTracks() {
-    if (UI.role !== 'editor') return '<div class="empty"><h2>Aún no hay pistas</h2><span>Cuando el editor cree una pista, aparecerá aquí.</span></div>';
-    return '<div class="empty"><h2>Aún no hay pistas</h2><span>Crea la primera pista con sus puntos de cronometraje, o importa tu Excel.</span><div class="row"><button class="btn primary" data-newtrack="1" type="button">Crear pista</button><button class="btn" data-tab="datos" type="button">Importar Excel</button></div></div>';
+  function emptyTracks(inPistas) {
+    var ed = UI.role === 'editor';
+    if (!ed) return '<div class="empty"><h2>Aún no hay pistas</h2><span>Cuando el editor cree una pista, aparecerá aquí.</span></div>';
+    if (inPistas) return '<div class="empty"><h2>Aún no hay pistas</h2><span>Crea la primera con el botón «+ Pista», o importa tu Excel.</span><div class="row"><button class="btn" data-tab="datos" type="button">Importar Excel</button></div></div>';
+    return '<div class="empty"><h2>Aún no hay pistas</h2><span>Crea la primera pista desde la pestaña Pistas, o importa tu Excel.</span><div class="row"><button class="btn primary" data-tab="pistas" type="button">Ir a Pistas</button><button class="btn" data-tab="datos" type="button">Importar Excel</button></div></div>';
+  }
+  function pickerHtml() {
+    var tl = trackList();
+    if (!tl.length) return '';
+    return '<div class="trackpick"><select id="trackSel" aria-label="Pista">' + tl.map(function (x) { return '<option value="' + x.id + '"' + (x.id === UI.track ? ' selected' : '') + '>' + esc(x.name) + '</option>'; }).join('') + '</select></div>';
   }
   function render() {
-    var gate = !UI.role, ed = UI.role === 'editor';
+    var gate = !UI.role, ed = UI.role === 'editor', fab = $('fab');
     document.querySelector('.tabs').hidden = gate;
-    $('trackpick').hidden = gate;
-    if (gate) { $('trackpick').innerHTML = ''; $('fab').hidden = true; $('view').innerHTML = gateHtml(); setSync(); return; }
-    var tl = trackList(), t = curTrack();
-    $('trackpick').innerHTML = tl.length
-      ? '<select id="trackSel" aria-label="Pista">' + tl.map(function (x) { return '<option value="' + x.id + '"' + (x.id === UI.track ? ' selected' : '') + '>' + esc(x.name) + '</option>'; }).join('') + '</select>' +
-        (ed ? '<button class="btn" type="button" data-newtrack="1">+ Pista</button>' : '')
-      : '';
+    if (gate) { fab.hidden = true; $('view').innerHTML = gateHtml(); setSync(); return; }
+    var t = curTrack();
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) { b.setAttribute('aria-selected', b.dataset.tab === UI.tab ? 'true' : 'false'); });
-    $('fab').hidden = !ed || !t || UI.tab === 'datos';
+    if (!ed || UI.tab === 'datos') fab.hidden = true;
+    else if (UI.tab === 'pistas') { fab.hidden = false; fab.textContent = '+ Pista'; fab.dataset.newtrack = '1'; delete fab.dataset.new; }
+    else { fab.hidden = !t; fab.textContent = '+ Descenso'; fab.dataset.new = '1'; delete fab.dataset.newtrack; }
     var v = $('view');
     if (UI.loading) { v.innerHTML = '<div class="empty">Cargando descensos…</div>'; setSync(); return; }
     if (UI.tab === 'datos') v.innerHTML = datosHtml();
-    else if (!t) v.innerHTML = emptyTracks();
-    else if (UI.tab === 'resumen') { v.innerHTML = resumenHtml(t); drawChart(t); }
-    else v.innerHTML = diarioHtml(t);
+    else if (UI.tab === 'pistas') v.innerHTML = pistasHtml();
+    else if (!t) v.innerHTML = emptyTracks(false);
+    else if (UI.tab === 'resumen') { v.innerHTML = pickerHtml() + resumenHtml(t); drawChart(t); }
+    else v.innerHTML = pickerHtml() + descensosHtml(t);
     setSync();
+  }
+
+  /* ---------- Pistas ---------- */
+  function pistasHtml() {
+    var tl = trackList(), ed = UI.role === 'editor';
+    if (!tl.length) return emptyTracks(true);
+    var h = '<div class="tlist">';
+    tl.forEach(function (t) {
+      var st = stats(t, t.ref || ''), im = S.trackimgs[t.id];
+      h += '<div class="tcard' + (ed ? ' ed' : '') + '" role="button" tabindex="0" data-gotrack="' + t.id + '">' +
+        '<div class="tthumb">' + (im && im.data ? '<button class="thumbbtn" type="button" data-map="' + t.id + '" aria-label="Ver circuito ' + esc(t.name) + '"><img src="' + esc(im.data) + '" alt=""></button>' : '<span class="nothumb">Sin imagen</span>') + '</div>' +
+        '<div class="tinfo"><div class="tname">' + flagHtml(t.country) + '<b>' + esc(t.name) + '</b></div>' +
+        '<div class="tstats"><span><span class="eyebrow">Descensos</span><b class="mono">' + st.runs + '</b></span><span><span class="eyebrow">Personal Best</span><b class="mono">' + (st.pb != null ? fmt(st.pb) + ' s' : '–') + '</b></span></div></div>';
+      if (ed) {
+        h += '<div class="kebab"><button class="kbtn" type="button" data-menu="' + t.id + '" aria-label="Más opciones" aria-expanded="' + (UI.menu === t.id) + '">' + DOTS + '</button>';
+        if (UI.menu === t.id) h += '<div class="kmenu"><button type="button" data-edittrack="' + t.id + '">Editar</button><button type="button" class="danger" data-deltrack="' + t.id + '">' + (UI.confirmTrack === t.id ? 'Confirmar: borrar pista y descensos' : 'Eliminar') + '</button></div>';
+        h += '</div>';
+      }
+      h += '</div>';
+    });
+    return h + '</div>';
+  }
+  function goTrack(id) {
+    UI.track = id; UI.tab = 'resumen'; UI.menu = null; UI.confirmTrack = null;
+    try { history.replaceState(null, '', '#resumen'); } catch (x) {}
+    render(); window.scrollTo(0, 0);
   }
 
   /* ---------- Resumen ---------- */
@@ -462,13 +529,13 @@ textarea.in { resize: vertical; min-height: 64px; }
       '<div><span class="eyebrow">Descensos</span><div class="v">' + st.runs + '</div></div>' +
       '<div><span class="eyebrow">Caídas (DNF)</span><div class="v">' + st.dnf + '</div></div></section>';
     h += '<section class="card chartcard"><div class="head"><div><span class="eyebrow">Evolución</span><h2>Tiempo final por descenso</h2></div></div><div id="chart"></div><div class="legend" id="legend"></div></section>';
-    h += '<section class="card"><div class="head" style="margin-bottom:8px"><h2>Mejores parciales</h2></div><div class="tblwrap"><table><thead><tr><th>Tramo</th><th class="n">Mejor</th><th class="n">Media</th><th>Cuándo</th></tr></thead><tbody>';
+    h += '<section class="card"><div class="head" style="margin-bottom:8px"><h2>Mejores parciales</h2></div><div class="tblwrap"><table><thead><tr><th>Tramo</th><th class="n">Mejor</th><th class="n">Fecha</th></tr></thead><tbody>';
     t.splits.forEach(function (name, i) {
       var lab = i === 0 ? esc(name) : esc(t.splits[i - 1]) + ' → ' + esc(name);
       var r = st.bestRun[i];
-      h += '<tr><td>' + lab + '</td><td class="n mono">' + (st.best[i] != null ? fmt(st.best[i]) : '–') + '</td><td class="n mono">' + (st.avg[i] != null ? fmt(st.avg[i]) : '–') + '</td><td class="sub">' + (r ? fmtShort(r.date) + ' #' + r.n : '') + '</td></tr>';
+      h += '<tr><td>' + lab + '</td><td class="n mono">' + (st.best[i] != null ? fmt(st.best[i]) : '–') + '</td><td class="n mono">' + (r ? fmtFull(r.date) : '') + '</td></tr>';
     });
-    h += '<tr class="sectotal"><td>Suma de mejores</td><td class="n mono">' + (st.vb != null ? fmt(st.vb) : '–') + '</td><td></td><td></td></tr></tbody></table></div></section>';
+    h += '<tr class="sectotal"><td>Suma de mejores</td><td class="n mono">' + (st.vb != null ? fmt(st.vb) : '–') + '</td><td></td></tr></tbody></table></div></section>';
     return h;
   }
   function startColor(t, s) { var i = startsOf(t).indexOf(s); return 'var(--s' + (i < 0 ? 0 : i % 3) + ')'; }
@@ -477,12 +544,14 @@ textarea.in { resize: vertical; min-height: 64px; }
     var ref0 = t.ref || '', st = stats(t, ref0);
     var runs = runsOf(t.id).filter(function (r) { return !ref0 || r.start === ref0; });
     var pts = runs.filter(function (r) { return finishOf(r) != null; });
-    var nBad = runs.length - pts.length, lg = $('legend');
-    var starts = ref0 ? [ref0] : startsOf(t);
-    if (lg) lg.innerHTML = starts.map(function (x) { return '<span><i style="--c:' + startColor(t, x) + '"></i>' + (starts.length > 1 ? 'Descenso ' + esc(x) : 'Descenso') + '</span>'; }).join('') +
+    var nDnf = runs.filter(function (r) { return r.status === 'dnf'; }).length;
+    var nNt = runs.filter(function (r) { return finishOf(r) == null && r.status !== 'dnf'; }).length;
+    var lg = $('legend');
+    if (lg) lg.innerHTML = '<span><i style="--c:var(--accent)"></i>Descenso</span>' +
       (st.pb != null ? '<span><i class="lg-line" style="--c:var(--accent)"></i>Personal Best</span>' : '') +
       (st.vb != null ? '<span><i class="lg-line" style="--c:var(--best)"></i>Virtual Best</span>' : '') +
-      (nBad ? '<span><b class="lg-x">×</b>DNF o sin tiempo</span>' : '');
+      (nNt ? '<span><i class="lg-hollow"></i>Sin tiempo</span>' : '') +
+      (nDnf ? '<span><b class="lg-x">×</b>DNF</span>' : '');
     if (pts.length < 2) { box.innerHTML = '<p class="sub">Con dos descensos con tiempo ya se dibuja la evolución.</p>'; return; }
     var W = box.clientWidth || 340, H = 250, L = 40, R = 12, T = 28, B = 36, PX = 14;
     var vals = pts.map(finishOf), lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
@@ -504,18 +573,19 @@ textarea.in { resize: vertical; min-height: 64px; }
     var path = pts.map(function (r, j) { return (j ? 'L' : 'M') + xs(idx[r.id]).toFixed(1) + ' ' + ys(finishOf(r)).toFixed(1); }).join(' ');
     s += '<path d="' + path + '" fill="none" stroke="var(--muted)" stroke-width="1" opacity=".5"/>';
     runs.forEach(function (r, i) {
-      var x = xs(i).toFixed(1), f = finishOf(r), lab = 'Descenso ' + (i + 1) + ' · ' + fmtDay(r.date) + ' · ' + (f != null ? fmt(f) : r.status === 'dnf' ? 'DNF' : 'sin tiempo');
+      var xn = xs(i), x = xn.toFixed(1), f = finishOf(r), lab = 'Descenso ' + (i + 1) + ' · ' + fmtDay(r.date) + ' · ' + (f != null ? fmt(f) : r.status === 'dnf' ? 'DNF' : 'sin tiempo');
       s += '<g class="hit" data-chartrun="' + r.id + '" tabindex="0" role="button" aria-label="' + esc(lab) + '"><title>' + esc(lab) + '</title><circle cx="' + x + '" cy="' + (f != null ? ys(f).toFixed(1) : 12) + '" r="14" fill="transparent"/>';
-      if (f != null) s += '<circle cx="' + x + '" cy="' + ys(f).toFixed(1) + '" r="4.5" fill="' + startColor(t, r.start) + '" stroke="var(--surface)" stroke-width="1.5"/>';
-      else s += '<path d="M' + (x - 5) + ' 7L' + (+x + 5) + ' 17M' + (+x + 5) + ' 7L' + (x - 5) + ' 17" stroke="var(--bad)" stroke-width="2.4" stroke-linecap="round"/>';
+      if (f != null) s += '<circle cx="' + x + '" cy="' + ys(f).toFixed(1) + '" r="4.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="1.5"/>';
+      else if (r.status === 'dnf') s += '<path d="M' + (xn - 3.5).toFixed(1) + ' 8.5L' + (xn + 3.5).toFixed(1) + ' 15.5M' + (xn + 3.5).toFixed(1) + ' 8.5L' + (xn - 3.5).toFixed(1) + ' 15.5" stroke="var(--bad)" stroke-width="2" stroke-linecap="round"/>';
+      else s += '<circle cx="' + x + '" cy="12" r="4" fill="none" stroke="var(--accent)" stroke-width="2"/>';
       s += '</g>';
     });
     s += '</svg>';
     box.innerHTML = s;
   }
 
-  /* ---------- Diario ---------- */
-  function diarioHtml(t) {
+  /* ---------- Descensos ---------- */
+  function descensosHtml(t) {
     var runs = runsOf(t.id), ed = UI.role === 'editor';
     if (!runs.length) return '<div class="empty"><h2>Sin descensos en ' + esc(t.name) + '</h2><span>' + (ed ? 'Pulsa «+ Descenso» para registrar el primero.' : 'Todavía no hay descensos registrados.') + '</span></div>';
     var ref = t.ref || '', pb = stats(t, ref).pb, days = {}, order = [];
@@ -540,6 +610,7 @@ textarea.in { resize: vertical; min-height: 64px; }
           if (isRef && pb != null && f !== pb) dl = fmtD(f - pb);
         }
         var meta = [];
+        if (r.time) meta.push('<span class="mono">' + esc(r.time) + '</span>');
         if (isComp(r)) meta.push('<b>Competición</b>');
         if (r.speed != null) meta.push(fmt1(r.speed) + ' km/h');
         if (r.ice) meta.push('<span class="ice">' + iceIcon(r.ice) + esc(r.ice) + '</span>');
@@ -564,7 +635,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       h += '<tr><td>' + esc(name) + '</td><td class="n mono">' + acum + '</td><td class="n mono">' + (sv[i] != null ? fmt(sv[i]) : '–') + '</td></tr>';
     });
     h += '</tbody></table></div>';
-    var info = [['Tipo', isComp(r) ? 'Competición' : 'Entreno'], ['Salida', r.start || '–'], ['Resultado', stTxt], ['Vel. máx', r.speed != null ? fmt1(r.speed) + ' km/h' : '–'], ['Temperatura', r.temp != null ? r.temp + ' ºC' : '–'], ['Hielo', r.ice || '–'], ['Sensaciones', r.notes || '–']];
+    var info = [['Tipo', isComp(r) ? 'Competición' : 'Entreno'], ['Hora', r.time || '–'], ['Salida', r.start || '–'], ['Resultado', stTxt], ['Vel. máx', r.speed != null ? fmt1(r.speed) + ' km/h' : '–'], ['Temperatura', r.temp != null ? r.temp + ' ºC' : '–'], ['Hielo', r.ice || '–'], ['Sensaciones', r.notes || '–']];
     h += '<div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px">' + info.map(function (x) { return '<span class="sub">' + x[0] + '</span><span>' + esc(x[1]) + '</span>'; }).join('') + '</div>';
     return h;
   }
@@ -574,10 +645,10 @@ textarea.in { resize: vertical; min-height: 64px; }
     var rs = runsOf(t.id), last = rs[rs.length - 1], date = todayIso();
     var session = 1, n = 1, same = rs.filter(function (r) { return r.date === date; });
     if (same.length) { var ls = same[same.length - 1]; session = ls.session || 1; n = (ls.n || 0) + 1; }
-    return { id: null, date: date, session: session, n: n, start: (last && (t.starts || []).indexOf(last.start) >= 0) ? last.start : (t.starts && t.starts[0]) || '', status: 'ok', type: 'entreno', t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
+    return { id: null, date: date, time: '', session: session, n: n, start: (last && (t.starts || []).indexOf(last.start) >= 0) ? last.start : (t.starts && t.starts[0]) || '', status: 'ok', type: 'entreno', t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
   }
   function draftFrom(r, t) {
-    return { id: r.id, date: r.date, session: r.session || 1, n: r.n, start: r.start || '', status: r.status, type: isComp(r) ? 'competicion' : 'entreno', t: t.splits.map(function (_, i) { var v = r.times && r.times[i]; return v == null ? '' : String(v); }), speed: r.speed == null ? '' : String(r.speed), temp: r.temp == null ? '' : String(r.temp), ice: r.ice || '', notes: r.notes || '', err: '', confirmDel: false };
+    return { id: r.id, date: r.date, time: r.time || '', session: r.session || 1, n: r.n, start: r.start || '', status: r.status, type: isComp(r) ? 'competicion' : 'entreno', t: t.splits.map(function (_, i) { var v = r.times && r.times[i]; return v == null ? '' : String(v); }), speed: r.speed == null ? '' : String(r.speed), temp: r.temp == null ? '' : String(r.temp), ice: r.ice || '', notes: r.notes || '', err: '', confirmDel: false };
   }
   function openSheet() { $('sheetbg').hidden = false; }
   function openEditor(d) { UI.ro = null; UI.ed = d; UI.trk = null; UI.map = null; drawSheet(); openSheet(); var f = $('f-t0'); if (f && !d.id) f.focus(); }
@@ -592,7 +663,8 @@ textarea.in { resize: vertical; min-height: 64px; }
     var iceSet = DEFAULT_ICE.slice();
     runsOf(t.id).forEach(function (r) { if (r.ice && iceSet.indexOf(r.ice) < 0) iceSet.push(r.ice); });
     var h = '<div class="sh-top"><div><div class="eyebrow">' + esc(t.name) + '</div><h2>' + (d.id ? 'Editar descenso' : 'Nuevo descenso') + '</h2></div><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>';
-    h += '<div class="f2"><label class="fld">FECHA<input class="in" type="date" id="f-date" value="' + esc(d.date) + '"></label><label class="fld">SESIÓN<input class="in" type="number" min="1" inputmode="numeric" id="f-session" value="' + d.session + '"></label><label class="fld">Nº DESCENSO<input class="in" type="number" min="1" inputmode="numeric" id="f-n" value="' + d.n + '"></label></div>';
+    h += '<div class="f2 two"><label class="fld">FECHA<input class="in" type="date" id="f-date" value="' + esc(d.date) + '"></label><label class="fld">HORA (OPCIONAL)<input class="in" type="time" id="f-time" value="' + esc(d.time) + '"></label></div>';
+    h += '<div class="f2 two"><label class="fld">SESIÓN<input class="in" type="number" min="1" inputmode="numeric" id="f-session" value="' + d.session + '"></label><label class="fld">Nº DESCENSO<input class="in" type="number" min="1" inputmode="numeric" id="f-n" value="' + d.n + '"></label></div>';
     var ss = (t.starts || []).slice();
     if (d.start && ss.indexOf(d.start) < 0) ss.push(d.start);
     if (ss.length) h += '<div><div class="eyebrow" style="margin-bottom:6px">SALIDA</div><div class="chips" role="group" aria-label="Salida">' + ss.map(function (x) { return '<button class="chip" type="button" data-pickstart="' + esc(x) + '" aria-pressed="' + (d.start === x) + '">' + esc(x) + '</button>'; }).join('') + '</div></div>';
@@ -644,6 +716,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var d = UI.ed; if (!d) return;
     var g = function (id) { var e = $(id); return e ? e.value : null; };
     if (g('f-date') != null) d.date = g('f-date');
+    if (g('f-time') != null) d.time = g('f-time');
     if (g('f-session') != null) d.session = g('f-session');
     if (g('f-n') != null) d.n = g('f-n');
     if (g('f-speed') != null) d.speed = g('f-speed');
@@ -656,6 +729,8 @@ textarea.in { resize: vertical; min-height: 64px; }
     var d = UI.ed, t = curTrack(), k = t.splits.length;
     var fail = function (m) { d.err = m; var e = $('f-err'); if (e) e.textContent = m; };
     if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return fail('Indica la fecha.');
+    var tm = String(d.time || '').trim().slice(0, 5);
+    if (tm && !/^\d{2}:\d{2}$/.test(tm)) return fail('La hora no es válida.');
     var n = parseInt(d.n, 10), ses = parseInt(d.session, 10);
     if (!(n >= 1)) return fail('El número de descenso debe ser 1 o más.');
     if (!(ses >= 1)) ses = 1;
@@ -672,20 +747,24 @@ textarea.in { resize: vertical; min-height: 64px; }
     if (isNaN(speed) || isNaN(temp)) return fail('Revisa la velocidad o la temperatura.');
     var dup = runsOf(t.id).some(function (r) { return r.id !== d.id && r.date === d.date && (r.session || 1) === ses && r.n === n; });
     if (dup && !d.dupOk) { d.dupOk = true; return fail('Ya existe el descenso #' + n + ' de ese día y sesión. Pulsa Guardar otra vez si es correcto.'); }
-    var doc = { id: d.id || uid(), trackId: t.id, date: d.date, session: ses, n: n, start: d.start, type: d.type === 'competicion' ? 'competicion' : 'entreno', times: times, status: d.status, speed: speed, temp: temp, ice: d.ice || '', notes: d.notes.trim() };
+    var doc = { id: d.id || uid(), trackId: t.id, date: d.date, time: tm, session: ses, n: n, start: d.start, type: d.type === 'competicion' ? 'competicion' : 'entreno', times: times, status: d.status, speed: speed, temp: temp, ice: d.ice || '', notes: d.notes.trim() };
     putDoc('runs', doc);
     if (mode === 'again' && !d.id) {
-      UI.ed = { id: null, date: d.date, session: ses, n: n + 1, start: d.start, status: 'ok', type: d.type, t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
+      UI.ed = { id: null, date: d.date, time: '', session: ses, n: n + 1, start: d.start, status: 'ok', type: d.type, t: t.splits.map(function () { return ''; }), speed: '', temp: '', ice: '', notes: '', err: '', confirmDel: false };
       drawSheet(); toast('Descenso #' + n + ' guardado'); var f = $('f-t0'); if (f) f.focus();
     } else { closeSheet(); toast('Descenso guardado'); }
     render();
   }
 
-  /* ---------- Pistas ---------- */
+  /* ---------- Formulario de pista ---------- */
   function trackFormHtml() {
     var f = UI.trk, locked = f.id && runsOf(f.id).length > 0;
+    var opts = '<option value="">Sin especificar</option>' + COUNTRIES.map(function (c) { return '<option value="' + c.c + '"' + (f.country === c.c ? ' selected' : '') + '>' + esc(c.n) + '</option>'; }).join('');
     return '<div class="sh-top"><h2>' + (f.id ? 'Editar pista' : 'Nueva pista') + '</h2><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>' +
       '<label class="fld tf">NOMBRE<input class="in" id="tf-name" value="' + esc(f.name) + '" autocomplete="off" placeholder="p. ej. Lillehammer"></label>' +
+      '<label class="fld tf">PAÍS<select class="in" id="tf-country">' + opts + '</select></label>' +
+      '<div><div class="eyebrow" style="margin-bottom:6px;color:var(--ink)">IMAGEN DEL CIRCUITO</div><div class="mapbox">' + (f.img ? '<img src="' + esc(f.img) + '" alt="Circuito">' : '<span class="sub">Sin imagen</span>') + '</div>' +
+      '<div class="foot" style="margin-top:8px"><label class="btn" for="tf-img">' + (f.img ? 'Cambiar imagen' : 'Subir imagen') + '</label><input type="file" id="tf-img" accept="image/*" hidden>' + (f.img ? '<button class="btn danger" type="button" data-tfimgdel="1">Quitar imagen</button>' : '') + '</div><div class="err" id="tf-imgerr"></div></div>' +
       '<div><label class="fld tf">PUNTO DE CRONOMETRAJE<textarea class="in" id="tf-splits" rows="4"' + (locked ? ' disabled' : '') + '>' + esc(f.splits) + '</textarea></label>' +
       '<p class="hint" style="margin-top:6px">' + (locked ? 'Esta pista ya tiene descensos, los puntos no se pueden cambiar.' : 'En orden separados por coma<br>Ejemplo: Start, K5, O6, Finish.') + '</p></div>' +
       '<div><label class="fld tf">POSICIONES DE SALIDA<input class="in" id="tf-starts" value="' + esc(f.starts) + '" autocomplete="off"></label><p class="hint" style="margin-top:6px">Opcional, separadas por coma.</p></div>' +
@@ -693,31 +772,45 @@ textarea.in { resize: vertical; min-height: 64px; }
       '<div class="err" id="tf-err">' + esc(f.err || '') + '</div><div class="foot"><button class="btn primary" type="button" data-savetrack="1">Guardar pista</button></div>';
   }
   function splitList(s) { return String(s).split(/[\n,;]+/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function readTrackForm() {
+    var f = UI.trk; if (!f) return;
+    var g = function (id) { var e = $(id); return e ? e.value : null; };
+    if (g('tf-name') != null) f.name = g('tf-name');
+    if (g('tf-splits') != null) f.splits = g('tf-splits');
+    if (g('tf-starts') != null) f.starts = g('tf-starts');
+    if (g('tf-ref') != null) f.ref = g('tf-ref');
+    if (g('tf-country') != null) f.country = g('tf-country');
+  }
   function saveTrack() {
-    var f = UI.trk, name = $('tf-name').value.trim(), sp = $('tf-splits').disabled ? null : splitList($('tf-splits').value), starts = splitList($('tf-starts').value), ref = $('tf-ref').value.trim();
-    var fail = function (m) { f.err = m; $('tf-err').textContent = m; };
+    readTrackForm();
+    var f = UI.trk, name = f.name.trim(), locked = f.id && runsOf(f.id).length > 0;
+    var sp = locked ? null : splitList(f.splits), starts = splitList(f.starts), ref = String(f.ref || '').trim();
+    var fail = function (m) { f.err = m; var e = $('tf-err'); if (e) e.textContent = m; };
     if (!name) return fail('Pon un nombre a la pista.');
     if (trackList().some(function (x) { return x.id !== f.id && norm(x.name) === norm(name); })) return fail('Ya existe una pista con ese nombre.');
     if (sp && sp.length < 2) return fail('Indica al menos dos puntos (salida y meta).');
     var old = f.id ? S.tracks[f.id] : null;
-    var doc = { id: f.id || uid(), name: name, splits: sp || old.splits, starts: starts, ref: ref, created: old ? old.created : Date.now() };
-    putDoc('tracks', doc); UI.track = doc.id; closeSheet(); toast('Pista guardada'); render();
+    var doc = { id: f.id || uid(), name: name, country: f.country || '', splits: sp || old.splits, starts: starts, ref: ref, created: old ? old.created : Date.now() };
+    putDoc('tracks', doc);
+    if (f.imgChanged) {
+      if (f.img) putDoc('trackimgs', { id: doc.id, data: f.img });
+      else if (S.trackimgs[doc.id]) delDocs('trackimgs', [doc.id]);
+    }
+    UI.track = doc.id; closeSheet(); toast('Pista guardada'); render();
   }
   function deleteTrack(id) {
+    UI.menu = null;
     delDocs('runs', runsOf(id).map(function (r) { return r.id; }));
     if (S.trackimgs[id]) delDocs('trackimgs', [id]);
     delDocs('tracks', [id]); afterData(); render(); toast('Pista eliminada');
   }
 
-  /* ---------- Circuito ---------- */
+  /* ---------- Circuito (vista ampliada, solo lectura) ---------- */
   function mapHtml() {
-    var t = S.tracks[UI.map], im = S.trackimgs[UI.map], ed = UI.role === 'editor';
+    var t = S.tracks[UI.map], im = S.trackimgs[UI.map];
     if (!t) return '';
     return '<div class="sh-top"><div><div class="eyebrow">Circuito</div><h2>' + esc(t.name) + '</h2></div><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>' +
-      '<div class="mapbox">' + (im && im.data ? '<img src="' + esc(im.data) + '" alt="Trazado del circuito ' + esc(t.name) + '">' : '<span class="sub">Aún no hay imagen de este circuito.</span>') + '</div>' +
-      '<div class="err" id="map-err"></div>' +
-      (ed ? '<div class="foot"><label class="btn primary" for="mapfile">' + (im && im.data ? 'Cambiar imagen' : 'Subir imagen') + '</label><input type="file" id="mapfile" accept="image/*" hidden>' +
-      (im && im.data ? '<span class="sp"></span><button class="btn danger" type="button" data-mapdel="1">' + (UI.mapConfirm ? 'Confirmar: quitar' : 'Quitar imagen') + '</button>' : '') + '</div>' : '');
+      '<div class="mapbox">' + (im && im.data ? '<img src="' + esc(im.data) + '" alt="Trazado del circuito ' + esc(t.name) + '">' : '<span class="sub">Aún no hay imagen de este circuito.</span>') + '</div>';
   }
   function shrinkImage(file, cb) {
     var img = new Image(), url = URL.createObjectURL(file);
@@ -745,17 +838,9 @@ textarea.in { resize: vertical; min-height: 64px; }
   function datosHtml() {
     var tl = trackList(), ed = UI.role === 'editor';
     var h = '<div class="dgrid"><section class="card"><h2>Exportar</h2><p class="hint">Descarga un libro .xlsx con una hoja por pista y una hoja SUMMIT con el resumen.</p><button class="btn primary" type="button" data-export="1"' + (tl.length ? '' : ' disabled') + '>Descargar .xlsx</button><span class="sub" id="ex-msg"></span></section>';
-    if (ed) h += '<section class="card"><h2>Importar</h2><p class="hint">Lee cada hoja con columnas Fecha, Run, Start, tiempos, Top Speed, Tº, Estado Hielo, Sensaciones y Tipo (opcional). Antes de guardar verás qué se añade.</p><label class="btn" for="impfile">Elegir archivo .xlsx</label><input type="file" id="impfile" accept=".xlsx,.xls,.xlsm,.csv" hidden></section>';
+    if (ed) h += '<section class="card"><h2>Importar</h2><p class="hint">Lee cada hoja con columnas Fecha, Run, Start, tiempos, Top Speed, Tº, Estado Hielo, Sensaciones, Tipo y Hora (las dos últimas son opcionales). Antes de guardar verás qué se añade.</p><label class="btn" for="impfile">Elegir archivo .xlsx</label><input type="file" id="impfile" accept=".xlsx,.xls,.xlsm,.csv" hidden></section>';
     h += '<section class="card"><h2>Cuenta</h2><p class="hint">Este dispositivo está en modo ' + (ed ? '<b>editor</b>' : '<b>solo lectura</b>') + '.</p><button class="btn" type="button" data-logout="1">Cambiar código</button></section></div>';
     if (ed && UI.imp) h += importHtml();
-    h += '<section class="card"><h2 style="margin-bottom:6px">Pistas</h2>';
-    if (!tl.length) h += '<p class="hint">Todavía no hay pistas.</p>';
-    tl.forEach(function (t) {
-      h += '<div class="trk"><div><b>' + esc(t.name) + '</b><div class="sub">' + runsOf(t.id).length + ' descensos · ' + t.splits.length + ' puntos: ' + esc(t.splits.join(', ')) + '</div></div><div class="row"><button class="btn small" type="button" data-map="' + t.id + '">Ver circuito</button>' +
-        (ed ? '<button class="btn small" type="button" data-edittrack="' + t.id + '">Editar</button><button class="btn small danger" type="button" data-deltrack="' + t.id + '">' + (UI.confirmTrack === t.id ? 'Confirmar: borrar pista y descensos' : 'Eliminar') + '</button>' : '') + '</div></div>';
-    });
-    if (ed) h += '<div style="margin-top:12px"><button class="btn" type="button" data-newtrack="1">+ Nueva pista</button></div>';
-    h += '</section>';
     return h;
   }
   function serial(iso) { var p = iso.split('-'); return (Date.UTC(+p[0], +p[1] - 1, +p[2]) - Date.UTC(1899, 11, 30)) / 86400000; }
@@ -766,9 +851,9 @@ textarea.in { resize: vertical; min-height: 64px; }
     used[n] = 1; return n;
   }
   function trackSheet(t) {
-    var runs = runsOf(t.id), k = t.splits.length, ws = {}, sb = 3 + k + 5, r = 0, maxC = sb + k - 1;
+    var runs = runsOf(t.id), k = t.splits.length, ws = {}, sb = 3 + k + 6, r = 0, maxC = sb + k - 1;
     var put = function (row, c, v, extra) { var cell = typeof v === 'number' ? { t: 'n', v: v } : { t: 's', v: v }; if (extra) Object.assign(cell, extra); ws[XLSX.utils.encode_cell({ r: row, c: c })] = cell; };
-    var hdr = ['Fecha', 'Run', 'Start'].concat(t.splits, ['Top Speed (km/h)', 'Tº', 'Estado Hielo', 'Sensaciones', 'Tipo'], t.splits);
+    var hdr = ['Fecha', 'Run', 'Start'].concat(t.splits, ['Top Speed (km/h)', 'Tº', 'Estado Hielo', 'Sensaciones', 'Tipo', 'Hora'], t.splits);
     hdr.forEach(function (x, c) { put(0, c, x); });
     r = 1; var prev = null;
     runs.forEach(function (run) {
@@ -788,6 +873,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       if (run.ice) put(r, 3 + k + 2, run.ice);
       if (run.notes) put(r, 3 + k + 3, run.notes);
       put(r, 3 + k + 4, isComp(run) ? 'Competición' : 'Entreno');
+      if (run.time) put(r, 3 + k + 5, run.time);
       var sec = sectors(run), er = r + 1;
       for (var j = 0; j < k; j++) {
         var v2 = sec[j];
@@ -797,7 +883,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       prev = run; r++;
     });
     ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(r - 1, 0), c: maxC } });
-    ws['!cols'] = hdr.map(function (_, c) { return { wch: c === 3 + k + 3 ? 60 : c === 3 + k + 4 ? 13 : c === 0 ? 11 : 10 }; });
+    ws['!cols'] = hdr.map(function (_, c) { return { wch: c === 3 + k + 3 ? 60 : c === 3 + k + 4 ? 13 : c === 3 + k + 5 ? 8 : c === 0 ? 11 : 10 }; });
     return ws;
   }
   function buildWorkbook() {
@@ -805,7 +891,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     tl.forEach(function (t) { t._sheet = safeSheet(t.name, used); t._ws = trackSheet(t); });
     ['', 'Pista', 'Personal Best', 'Virtual Best', 'MAX Speed', 'RUNS', 'Crash'].forEach(function (h, c) { if (h) sum[XLSX.utils.encode_cell({ r: 0, c: c })] = { t: 's', v: h }; });
     tl.forEach(function (t, i) {
-      var st = stats(t, t.ref || ''), k = t.splits.length, sb = 3 + k + 5, q = "'" + t._sheet + "'!", last = 2000, r = i + 1;
+      var st = stats(t, t.ref || ''), k = t.splits.length, sb = 3 + k + 6, q = "'" + t._sheet + "'!", last = 2000, r = i + 1;
       var mk = function (c, v, f) { var cell = v == null ? { t: 's', v: '' } : typeof v === 'number' ? { t: 'n', v: v } : { t: 's', v: v }; if (f) cell.f = f; sum[XLSX.utils.encode_cell({ r: r, c: c })] = cell; };
       var fin = colName(3 + k - 1), sectorMins = [];
       var cr = q + 'C2:C' + last, mn = function (rg) { return t.ref ? '_xlfn.MINIFS(' + rg + ',' + cr + ',"' + t.ref.replace(/"/g, '""') + '")' : 'MIN(' + rg + ')'; };
@@ -845,6 +931,12 @@ textarea.in { resize: vertical; min-height: 64px; }
     if (m) return (m[3].length === 2 ? '20' + m[3] : m[3]) + '-' + pad2(+m[2]) + '-' + pad2(+m[1]);
     m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[1] + '-' + m[2] + '-' + m[3] : null;
   }
+  function toTime(v) {
+    if (v == null || v === '') return '';
+    if (typeof v === 'number' && v >= 0 && v < 1) { var mi = Math.round(v * 1440); return pad2(Math.floor(mi / 60) % 24) + ':' + pad2(mi % 60); }
+    var m = String(v).match(/(\d{1,2}):(\d{2})/);
+    return m ? pad2(+m[1]) + ':' + m[2] : '';
+  }
   function cleanSplitName(s, i) { s = cellStr(s); if (i === 0 && /^star+t?\s*time$/i.test(s)) return 'Start time'; return s || ('P' + (i + 1)); }
   function parseSheet(name, rows) {
     var hi = -1, i;
@@ -854,7 +946,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var sp = -1; for (i = 3; i < H.length; i++) if (/speed|velocidad/.test(H[i])) { sp = i; break; }
     if (sp < 5) return null;
     var find = function (re, from) { for (var j = from; j < H.length; j++) if (re.test(H[j])) return j; return -1; };
-    var cT = find(/^t[o]?$|temp/, sp + 1), cI = find(/hielo|ice/, sp + 1), cN = find(/sensac|coment|notas|notes/, sp + 1), cTipo = find(/^tipo$/, sp + 1);
+    var cT = find(/^t[o]?$|temp/, sp + 1), cI = find(/hielo|ice/, sp + 1), cN = find(/sensac|coment|notas|notes/, sp + 1), cTipo = find(/^tipo$/, sp + 1), cHora = find(/^hora$/, sp + 1);
     if (cT < 0) cT = sp + 1; if (cI < 0) cI = sp + 2; if (cN < 0) cN = sp + 3;
     var splits = []; for (i = 3; i < sp; i++) splits.push(cleanSplitName(rows[hi][i], i - 3));
     var k = splits.length, out = { name: name, splits: splits, starts: [], runs: [], skipped: 0 }, date = null, session = 1, brk = false, hasData = false;
@@ -880,8 +972,9 @@ textarea.in { resize: vertical; min-height: 64px; }
       var tv = typeof r[cT] === 'number' ? r[cT] : parseNum(r[cT]);
       var st = cellStr(r[2]);
       var tipo = cTipo >= 0 && /compet/.test(norm(r[cTipo])) ? 'competicion' : 'entreno';
+      var hora = cHora >= 0 ? toTime(r[cHora]) : '';
       if (st && out.starts.indexOf(st) < 0) out.starts.push(st);
-      out.runs.push({ date: date, session: session, n: n, start: st, type: tipo, times: times, status: status, speed: (sv2 == null || isNaN(sv2)) ? null : sv2, temp: (tv == null || isNaN(tv)) ? null : tv, ice: cellStr(r[cI]), notes: cellStr(r[cN]) });
+      out.runs.push({ date: date, time: hora, session: session, n: n, start: st, type: tipo, times: times, status: status, speed: (sv2 == null || isNaN(sv2)) ? null : sv2, temp: (tv == null || isNaN(tv)) ? null : tv, ice: cellStr(r[cI]), notes: cellStr(r[cN]) });
     }
     return out.runs.length ? out : null;
   }
@@ -945,7 +1038,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       if (tid === 'new') {
         var name = (s.newName || s.name).trim() || s.name;
         if (trackList().some(function (t) { return norm(t.name) === norm(name); })) name += ' (importada)';
-        var doc = { id: uid(), name: name, splits: s.splits, starts: s.starts, created: Date.now() };
+        var doc = { id: uid(), name: name, country: '', splits: s.splits, starts: s.starts, created: Date.now() };
         S.tracks[doc.id] = doc; rows.push(rowOf('tracks', doc)); tid = doc.id; tracks++;
       } else {
         var t = S.tracks[tid], add = s.starts.filter(function (x) { return (t.starts || []).indexOf(x) < 0; });
@@ -966,22 +1059,34 @@ textarea.in { resize: vertical; min-height: 64px; }
 
   /* ---------- Eventos ---------- */
   document.addEventListener('click', function (e) {
+    if (UI.menu && !(e.target.closest && e.target.closest('.kebab'))) { UI.menu = null; UI.confirmTrack = null; if (UI.role) render(); return; }
     var cr = e.target.closest && e.target.closest('[data-chartrun]');
     if (cr) { openRunById(cr.getAttribute('data-chartrun')); return; }
     if (e.target === $('sheetbg')) { closeSheet(); return; }
-    var b = e.target.closest('button, label.btn'); if (!b) return;
+    var b = e.target.closest('button, label.btn');
+    if (!b) {
+      var tc = e.target.closest('[data-gotrack]');
+      if (tc) goTrack(tc.getAttribute('data-gotrack'));
+      return;
+    }
     var d = b.dataset, t = curTrack();
     if (UI.role !== 'editor' && EDITS.some(function (k) { return d[k] !== undefined; })) return;
     if (d.entercode) { enter($('codein').value.trim()); return; }
     if (d.logout) { logout(); return; }
-    if (d.tab) { UI.tab = d.tab; try { history.replaceState(null, '', '#' + d.tab); } catch (x) {} render(); window.scrollTo(0, 0); return; }
+    if (d.tab) { UI.tab = d.tab; UI.menu = null; try { history.replaceState(null, '', '#' + d.tab); } catch (x) {} render(); window.scrollTo(0, 0); return; }
+    if (d.menu) { UI.menu = UI.menu === d.menu ? null : d.menu; UI.confirmTrack = null; render(); return; }
     if (d.new && t) { openEditor(newDraft(t)); return; }
     if (d.run) { openRunById(d.run); return; }
     if (d.close) { closeSheet(); return; }
-    if (d.newtrack) { UI.ro = null; UI.ed = null; UI.map = null; UI.trk = { id: null, name: '', splits: '', starts: '', ref: '', err: '' }; drawSheet(); openSheet(); return; }
-    if (d.edittrack) { var x = S.tracks[d.edittrack]; UI.ro = null; UI.ed = null; UI.map = null; UI.trk = { id: x.id, name: x.name, splits: x.splits.join(', '), starts: (x.starts || []).join(', '), ref: x.ref || '', err: '' }; drawSheet(); openSheet(); return; }
-    if (d.map) { UI.ro = null; UI.ed = null; UI.trk = null; UI.map = d.map; UI.mapConfirm = false; drawSheet(); openSheet(); return; }
-    if (d.mapdel) { if (UI.mapConfirm) { delDocs('trackimgs', [UI.map]); UI.mapConfirm = false; drawSheet(); render(); toast('Imagen eliminada'); } else { UI.mapConfirm = true; drawSheet(); } return; }
+    if (d.newtrack) { UI.ro = null; UI.ed = null; UI.map = null; UI.trk = { id: null, name: '', country: '', splits: '', starts: '', ref: '', img: null, imgChanged: false, err: '' }; drawSheet(); openSheet(); return; }
+    if (d.edittrack) {
+      var x = S.tracks[d.edittrack]; UI.menu = null; UI.confirmTrack = null;
+      UI.ro = null; UI.ed = null; UI.map = null;
+      UI.trk = { id: x.id, name: x.name, country: x.country || '', splits: x.splits.join(', '), starts: (x.starts || []).join(', '), ref: x.ref || '', img: (S.trackimgs[x.id] && S.trackimgs[x.id].data) || null, imgChanged: false, err: '' };
+      drawSheet(); openSheet(); render(); return;
+    }
+    if (d.tfimgdel) { readTrackForm(); UI.trk.img = null; UI.trk.imgChanged = true; drawSheet(); return; }
+    if (d.map) { UI.ro = null; UI.ed = null; UI.trk = null; UI.map = d.map; drawSheet(); openSheet(); return; }
     if (d.savetrack) { saveTrack(); return; }
     if (d.deltrack) { if (UI.confirmTrack === d.deltrack) { UI.confirmTrack = null; deleteTrack(d.deltrack); } else { UI.confirmTrack = d.deltrack; render(); } return; }
     if (UI.ed) {
@@ -1001,11 +1106,12 @@ textarea.in { resize: vertical; min-height: 64px; }
     var el = e.target;
     if (el.id === 'trackSel') { UI.track = el.value; render(); return; }
     if (UI.role !== 'editor') return;
-    if (el.id === 'mapfile') {
-      var f = el.files && el.files[0], tid = UI.map; el.value = '';
-      if (f && tid) shrinkImage(f, function (data) {
-        if (!data) { var m = $('map-err'); if (m) m.textContent = 'No se pudo usar esa imagen. Prueba con otra en PNG o JPG.'; return; }
-        putDoc('trackimgs', { id: tid, data: data }); if (UI.map === tid) drawSheet(); toast('Imagen guardada');
+    if (el.id === 'tf-img') {
+      var f = el.files && el.files[0]; el.value = '';
+      if (f && UI.trk) shrinkImage(f, function (data) {
+        if (!UI.trk) return;
+        if (!data) { var m = $('tf-imgerr'); if (m) m.textContent = 'No se pudo usar esa imagen. Prueba con otra en PNG o JPG.'; return; }
+        readTrackForm(); UI.trk.img = data; UI.trk.imgChanged = true; drawSheet();
       });
       return;
     }
@@ -1028,6 +1134,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var el = e.target;
     if (e.key === 'Enter' && el.id === 'codein') { e.preventDefault(); enter(el.value.trim()); return; }
     if ((e.key === 'Enter' || e.key === ' ') && el.getAttribute && el.getAttribute('data-chartrun')) { e.preventDefault(); openRunById(el.getAttribute('data-chartrun')); return; }
+    if ((e.key === 'Enter' || e.key === ' ') && el.getAttribute && el.getAttribute('data-gotrack')) { e.preventDefault(); goTrack(el.getAttribute('data-gotrack')); return; }
     if (e.key === 'Enter' && el.dataset && el.dataset.ti !== undefined) {
       e.preventDefault();
       var nx = $('f-t' + (+el.dataset.ti + 1));
@@ -1037,7 +1144,11 @@ textarea.in { resize: vertical; min-height: 64px; }
   document.addEventListener('dragover', function (e) { if (UI.role === 'editor' && UI.tab === 'datos' && e.dataTransfer && e.dataTransfer.types.indexOf('Files') >= 0) e.preventDefault(); });
   document.addEventListener('drop', function (e) { if (UI.role === 'editor' && UI.tab === 'datos' && e.dataTransfer && e.dataTransfer.files.length) { e.preventDefault(); handleFile(e.dataTransfer.files[0]); } });
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { var t = curTrack(); if (t && UI.tab === 'resumen' && UI.role && !UI.loading) drawChart(t); }, 120); });
-  function fromHash() { var h = (location.hash || '').slice(1); if (h === 'resumen' || h === 'diario' || h === 'datos') UI.tab = h; }
+  function fromHash() {
+    var h = (location.hash || '').slice(1);
+    if (h === 'diario') h = 'descensos';
+    if (TABS.indexOf(h) >= 0) UI.tab = h;
+  }
   window.addEventListener('hashchange', function () { fromHash(); render(); });
 
   fromHash();
