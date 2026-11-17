@@ -328,29 +328,38 @@ textarea.in { resize: vertical; min-height: 64px; }
     return fetch(CFG.url + path, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined })
       .then(function (r) {
         if (!r.ok) return r.text().then(function (t) { var e = new Error(r.status + ' ' + t); e.status = r.status; throw e; });
-    });
+      });
   }
-  }
+
   function track(p) {
     UI.pending++; setSync();
-    return p.catch(function (e) {
+    return p.then(function () { UI.err = false; }, function (e) {
       UI.err = true;
       console.error('Supabase:', e);
       toast('No se guardó (' + (e && e.message ? e.message.slice(0, 120) : 'error') + ')');
     }).then(function () { UI.pending--; setSync(); });
   }
-  
-  function rowOf(col, doc) { var d = Object.assign({}, doc); delete d.id; return { col: col, id: doc.id, doc: d }; }
+
+  function rowOf(col, doc) {
+    var d = Object.assign({}, doc); delete d.id;
+    return { col: col, id: doc.id, doc: d };
+  }
+
   function pushRows(rows) {
     var ps = [];
-    for (var i = 0; i < rows.length; i += 25) ps.push(track(send('POST', '/rest/v1/docs?on_conflict=col,id', rows.slice(i, i + 25), 'resolve-duplicates,return=minimal')));
+    for (var i = 0; i < rows.length; i += 25) {
+      ps.push(track(send('POST', '/rest/v1/docs?on_conflict=col,id', rows.slice(i, i + 25), 'resolve-duplicates,return=minimal')));
+    }
     return Promise.all(ps);
   }
+
   function putDoc(col, doc) {
     var existed = !!S[col][doc.id];
     S[col][doc.id] = doc;
     var d = Object.assign({}, doc); delete d.id;
-    if (existed) return track(send('PATCH', '/rest/v1/docs?col=eq.' + col + '&id=eq.' + encodeURIComponent(doc.id), { doc: d }, 'return=minimal'));
+    if (existed) {
+      return track(send('PATCH', '/rest/v1/docs?col=eq.' + col + '&id=eq.' + encodeURIComponent(doc.id), { doc: d }, 'return=minimal'));
+    }
     return track(send('POST', '/rest/v1/docs', { col: col, id: doc.id, doc: d }, 'return=minimal'));
   }
   function delDocs(col, ids) {
