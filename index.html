@@ -678,7 +678,7 @@ textarea.in { resize: vertical; min-height: 64px; }
       });
       h += '</div><div class="warn" id="f-warn" style="margin-top:6px"></div></div>';
     }
-    h += '<div class="f2 two"><label class="fld">VEL. MÁX (KM/H)<input class="in" type="text" inputmode="decimal" id="f-speed" value="' + esc(d.speed) + '"></label><label class="fld">TEMPERATURA (ºC)<input class="in" type="text" inputmode="decimal" id="f-temp" value="' + esc(d.temp) + '"></label></div>';
+    h += '<div class="f2 two"><label class="fld">VEL. MÁX (KM/H)<input class="in" type="text" inputmode="decimal" id="f-speed" value="' + esc(d.speed) + '"></label><label class="fld">TEMPERATURA (ºC)<input class="in" type="text" inputmode="text" id="f-temp" value="' + esc(d.temp) + '"></label></div>';
     h += '<div><div class="eyebrow" style="margin-bottom:6px">ESTADO DEL HIELO</div><div class="chips">' + iceSet.map(function (s) { return '<button class="chip icechip" type="button" data-ice="' + esc(s) + '" aria-pressed="' + (d.ice === s) + '">' + iceIcon(s) + esc(s) + '</button>'; }).join('') + '</div></div>';
     h += '<label class="fld">SENSACIONES / COMENTARIOS<textarea class="in" id="f-notes" rows="3">' + esc(d.notes) + '</textarea></label>';
     h += '<div class="err" id="f-err">' + esc(d.err) + '</div>';
