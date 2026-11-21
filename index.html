@@ -95,8 +95,6 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 22px; text-t
 .xcap { text-align: center; margin-top: 2px; }
 .legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; align-items: center; }
 .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; background: var(--c); }
-.legend i.lg-ld { width: 20px; height: 1px; border-radius: 0; position: relative; vertical-align: 3px; }
-.legend i.lg-ld::after { content: ""; position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--c); }
 .legend i.lg-pb { background: var(--good-soft); border: 1.5px solid var(--good); }
 .legend i.lg-hollow { background: none; border: 1.5px solid var(--accent); }
 .lg-x { color: var(--bad); font-size: 14px; margin-right: 5px; line-height: 1; }
@@ -110,14 +108,23 @@ td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); white-space:
 tr:last-child td { border-bottom: 0; }
 th.n, td.n { text-align: right; }
 .sectotal td { font-weight: 600; border-top: 2px solid var(--line); }
+.ro td.dif { color: var(--muted); font-size: 13px; }
+.ro .good { color: var(--good); font-weight: 600; background: var(--good-soft); border-radius: 5px; padding: 2px 6px; margin-right: -6px; }
+.ro td.lbl { color: var(--muted); font-weight: 500; width: 1%; padding-right: 24px; }
+.ro td.wrap { white-space: normal; }
 
 .dayhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 0 2px 8px; flex-wrap: wrap; }
 .dayhead h3 { margin: 0; font-family: var(--font-display); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
 .day { display: flex; flex-direction: column; gap: 0; margin-bottom: 18px; }
 .sess { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 14px 4px; }
-.runs { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.run { display: grid; grid-template-columns: 34px 46px 1fr auto; gap: 2px 10px; align-items: center; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); padding: 11px 14px; }
-.run:first-child { border-top: 0; }
+.runs { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: visible; }
+.runwrap { position: relative; border-top: 1px solid var(--line); }
+.runwrap:first-child { border-top: 0; }
+.runwrap:first-child > .run { border-radius: 10px 10px 0 0; }
+.runwrap:last-child > .run { border-radius: 0 0 10px 10px; }
+.runwrap.ed > .run { padding-right: 48px; }
+.runkebab { position: absolute; top: 4px; right: 6px; }
+.run { display: grid; grid-template-columns: 34px 46px 1fr auto; gap: 2px 10px; align-items: center; width: 100%; text-align: left; background: none; border: 0; padding: 11px 14px; }
 .run:hover { background: var(--surface-2); }
 .rn { color: var(--muted); font-family: var(--font-mono); font-size: 13px; }
 .st { font-family: var(--font-mono); font-size: 12px; font-weight: 600; border: 1.5px solid var(--c); color: var(--c); border-radius: 5px; padding: 1px 0; text-align: center; }
@@ -270,8 +277,8 @@ textarea.in { resize: vertical; min-height: 64px; }
 
   /* ---------- Estado ---------- */
   var S = { tracks: {}, runs: {}, trackimgs: {} };
-  var UI = { tab: 'resumen', track: null, map: null, loading: false, pending: 0, err: false, role: null, code: '', gateMsg: '', ed: null, ro: null, imp: null, trk: null, confirmTrack: null, menu: null };
-  var EDITS = ['new', 'newtrack', 'edittrack', 'savetrack', 'deltrack', 'impgo', 'impcancel', 'save', 'del', 'status', 'pickstart', 'ice', 'type', 'menu', 'tfimgdel'];
+  var UI = { tab: 'resumen', track: null, map: null, loading: false, pending: 0, err: false, role: null, code: '', gateMsg: '', ed: null, ro: null, imp: null, trk: null, confirmTrack: null, menu: null, runMenu: null, confirmRun: null };
+  var EDITS = ['new', 'newtrack', 'edittrack', 'savetrack', 'deltrack', 'impgo', 'impcancel', 'save', 'del', 'status', 'pickstart', 'ice', 'type', 'menu', 'tfimgdel', 'runmenu', 'runedit', 'rundel'];
   var ICE = '<svg class="ico" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9.5 3.8L12 6l2.5-2.2M9.5 20.2L12 18l2.5 2.2"/></svg>';
   var DOTS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
   function iceIcon(name) {
@@ -307,7 +314,15 @@ textarea.in { resize: vertical; min-height: 64px; }
   function isComp(r) { return r.type === 'competicion'; }
 
   /* ---------- Datos derivados ---------- */
-  function trackList() { return Object.keys(S.tracks).map(function (k) { return S.tracks[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }
+  function trackList() {
+    var last = {};
+    Object.keys(S.runs).forEach(function (k) { var r = S.runs[k]; if (r.date > (last[r.trackId] || '')) last[r.trackId] = r.date; });
+    return Object.keys(S.tracks).map(function (k) { return S.tracks[k]; }).sort(function (a, b) {
+      var da = last[a.id] || '', db = last[b.id] || '';
+      if (da !== db) return da < db ? 1 : -1;
+      return a.name.localeCompare(b.name);
+    });
+  }
   function curTrack() { return S.tracks[UI.track] || null; }
   function runsOf(tid) {
     return Object.keys(S.runs).map(function (k) { return S.runs[k]; }).filter(function (r) { return r.trackId === tid; })
@@ -585,7 +600,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     var lg = $('legend');
     if (lg) lg.innerHTML = '<span><i style="--c:var(--accent)"></i>Descenso</span>' +
       (ser.pb.length ? '<span><i class="lg-pb"></i>Personal Best</span>' : '') +
-      (ser.vb.length ? '<span><i class="lg-ld" style="--c:var(--best)"></i>Virtual Best</span>' : '') +
+      (ser.vb.length ? '<span><i style="--c:var(--best)"></i>Virtual Best</span>' : '') +
       (nNt ? '<span><i class="lg-hollow"></i>Sin tiempo</span>' : '') +
       (nDnf ? '<span><b class="lg-x">×</b>DNF</span>' : '');
     var cap = $('chartCap');
@@ -618,7 +633,7 @@ textarea.in { resize: vertical; min-height: 64px; }
     runs.forEach(function (r, i) { s += '<text x="' + xs(i).toFixed(1) + '" y="' + (H - B + 15) + '" font-size="11" fill="var(--muted)" text-anchor="middle" font-family="var(--font-mono)">' + (i + 1) + '</text>'; });
     var idx = {}; runs.forEach(function (r, i) { idx[r.id] = i; });
     s += '<path d="' + pts.map(function (r, j) { return (j ? 'L' : 'M') + xs(idx[r.id]).toFixed(1) + ' ' + ys(finishOf(r)).toFixed(1); }).join(' ') + '" fill="none" stroke="var(--muted)" stroke-width="1" opacity=".5" stroke-linejoin="round"/>';
-    if (ser.vb.length) s += '<path d="' + linePath(ser.vb, xs, ys, n - 1) + '" fill="none" stroke="var(--best)" stroke-width="1" stroke-linejoin="round"/>';
+    if (ser.vb.length) s += '<path d="' + linePath(ser.vb, xs, ys, n - 1) + '" fill="none" stroke="var(--best)" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4 3"/>';
     ser.vb.forEach(function (p) {
       var x = xs(p.i).toFixed(1), y = ys(p.v).toFixed(1), lab = 'Virtual Best ' + fmt(p.v) + ' · descenso ' + (p.i + 1) + ' · ' + fmtDay(p.r.date);
       s += '<g class="hit" data-chartrun="' + p.r.id + '" tabindex="0" role="button" aria-label="' + esc(lab) + '"><title>' + esc(lab) + '</title><circle cx="' + x + '" cy="' + y + '" r="14" fill="transparent"/><circle cx="' + x + '" cy="' + y + '" r="4.5" fill="var(--best)" stroke="var(--surface)" stroke-width="1.5"/></g>';
@@ -671,28 +686,47 @@ textarea.in { resize: vertical; min-height: 64px; }
         if (r.speed != null) meta.push(fmt1(r.speed) + ' km/h');
         if (r.ice) meta.push('<span class="ice">' + iceIcon(r.ice) + esc(r.ice) + '</span>');
         if (r.temp != null) meta.push(r.temp + ' ºC');
-        h += '<button class="run" type="button" data-run="' + r.id + '"><span class="rn">#' + r.n + '</span><span class="st" style="--c:' + startColor(t, r.start) + '">' + esc(r.start || '–') + '</span>' + ft + '<span class="dl">' + dl + '</span>' +
-          (meta.length ? '<span class="meta">' + meta.map(function (m) { return '<span>' + m + '</span>'; }).join('') + '</span>' : '') + (r.notes ? '<span class="note">' + esc(r.notes) + '</span>' : '') + '</button>';
+        var kb = '';
+        if (ed) {
+          kb = '<div class="runkebab"><button class="kbtn" type="button" data-runmenu="' + r.id + '" aria-label="Opciones del descenso" aria-expanded="' + (UI.runMenu === r.id) + '">' + DOTS + '</button>' +
+            (UI.runMenu === r.id ? '<div class="kmenu"><button type="button" data-runedit="' + r.id + '">Editar</button><button type="button" class="danger" data-rundel="' + r.id + '">' + (UI.confirmRun === r.id ? 'Confirmar: borrar descenso' : 'Eliminar') + '</button></div>' : '') +
+            '</div>';
+        }
+        h += '<div class="runwrap' + (ed ? ' ed' : '') + '"><button class="run" type="button" data-run="' + r.id + '"><span class="rn">#' + r.n + '</span><span class="st" style="--c:' + startColor(t, r.start) + '">' + esc(r.start || '–') + '</span>' + ft + '<span class="dl">' + (ed ? '' : dl) + '</span>' +
+          (meta.length ? '<span class="meta">' + meta.map(function (m) { return '<span>' + m + '</span>'; }).join('') + '</span>' : '') + (r.notes ? '<span class="note">' + esc(r.notes) + '</span>' : '') + '</button>' + kb + '</div>';
       });
       h += '</div></section>';
     });
     return h;
   }
 
-  /* ---------- Hoja: solo lectura (visor) ---------- */
+  /* ---------- Hoja: solo lectura (visor y editor) ---------- */
   function roHtml(r) {
-    var t = curTrack(), sv = sectors(r), last = t.splits.length - 1;
-    var stTxt = r.status === 'dnf' ? 'DNF / caída' : r.status === 'nt' ? 'Sin tiempo' : 'Con tiempo';
-    var h = '<div class="sh-top"><div><div class="eyebrow">' + esc(t.name) + ' · solo lectura</div><h2>Descenso #' + r.n + ' · ' + fmtDay(r.date, true) + '</h2></div><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>';
-    h += '<div class="tblwrap"><table><thead><tr><th>Punto</th><th class="n">Acumulado</th><th class="n">Parcial</th></tr></thead><tbody>';
+    var t = curTrack(), sv = sectors(r), last = t.splits.length - 1, st = stats(t, t.ref || '');
+    var isRef = !t.ref || r.start === t.ref;
+    var h = '<div class="sh-top"><h2>Descenso #' + r.n + ' · ' + fmtDay(r.date, true) + '</h2><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>';
+    h += '<div class="tblwrap"><table class="ro"><thead><tr><th>Punto</th><th class="n">Parcial</th><th class="n">Diff</th><th class="n">Acumulado</th></tr></thead><tbody>';
     t.splits.forEach(function (name, i) {
-      var v = r.times ? r.times[i] : null;
+      var v = r.times ? r.times[i] : null, p = sv[i], bp = st.best[i];
       var acum = v != null ? fmt(v) : (r.status === 'dnf' && i === last ? 'DNF' : '–');
-      h += '<tr><td>' + esc(name) + '</td><td class="n mono">' + acum + '</td><td class="n mono">' + (sv[i] != null ? fmt(sv[i]) : '–') + '</td></tr>';
+      var pGood = p != null && bp != null && p <= bp + 0.0005;
+      var aGood = i === last && v != null && isRef && st.pb != null && v === st.pb;
+      var diff = p != null && bp != null ? '+' + fmt(p - bp) : '–';
+      h += '<tr><td>' + esc(name) + '</td><td class="n mono">' + (pGood ? '<span class="good">' : '') + (p != null ? fmt(p) : '–') + (pGood ? '</span>' : '') + '</td><td class="n mono dif">' + diff + '</td><td class="n mono">' + (aGood ? '<span class="good">' : '') + acum + (aGood ? '</span>' : '') + '</td></tr>';
     });
     h += '</tbody></table></div>';
-    var info = [['Tipo', isComp(r) ? 'Competición' : 'Entreno'], ['Hora', r.time || '–'], ['Salida', r.start || '–'], ['Resultado', stTxt], ['Vel. máx', r.speed != null ? fmt1(r.speed) + ' km/h' : '–'], ['Temperatura', r.temp != null ? r.temp + ' ºC' : '–'], ['Hielo', r.ice || '–'], ['Sensaciones', r.notes || '–']];
-    h += '<div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px">' + info.map(function (x) { return '<span class="sub">' + x[0] + '</span><span>' + esc(x[1]) + '</span>'; }).join('') + '</div>';
+    var info = [
+      ['Tipo', isComp(r) ? 'Competición' : 'Entreno', false],
+      ['Hora', r.time || '–', true],
+      ['Salida', r.start || '–', false],
+      ['Vel. máx', r.speed != null ? fmt1(r.speed) + ' km/h' : '–', true],
+      ['Temperatura', r.temp != null ? r.temp + ' ºC' : '–', true],
+      ['Hielo', r.ice || '–', false],
+      ['Sensaciones', r.notes || '–', false]
+    ];
+    h += '<div style="margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:8px 24px;align-items:baseline">' + info.map(function (x) {
+      return '<span class="sub">' + x[0] + '</span><span' + (x[2] ? ' class="mono"' : '') + '>' + esc(x[1]) + '</span>';
+    }).join('') + '</div>';
     return h;
   }
 
@@ -710,15 +744,14 @@ textarea.in { resize: vertical; min-height: 64px; }
   function openEditor(d) { UI.ro = null; UI.ed = d; UI.trk = null; UI.map = null; drawSheet(); openSheet(); var f = $('f-t0'); if (f && !d.id) f.focus(); }
   function openRunById(id) {
     var r = S.runs[id], t = curTrack(); if (!r || !t) return;
-    if (UI.role === 'editor') openEditor(draftFrom(r, t));
-    else { UI.ed = null; UI.trk = null; UI.map = null; UI.ro = r; drawSheet(); openSheet(); }
+    UI.ed = null; UI.trk = null; UI.map = null; UI.ro = r; drawSheet(); openSheet();
   }
   function closeSheet() { UI.ed = null; UI.ro = null; UI.trk = null; UI.map = null; $('sheetbg').hidden = true; $('sheet').innerHTML = ''; }
   function editorHtml() {
     var t = curTrack(), d = UI.ed;
     var iceSet = DEFAULT_ICE.slice();
     runsOf(t.id).forEach(function (r) { if (r.ice && iceSet.indexOf(r.ice) < 0) iceSet.push(r.ice); });
-    var h = '<div class="sh-top"><div><div class="eyebrow">' + esc(t.name) + '</div><h2>' + (d.id ? 'Editar descenso' : 'Nuevo descenso') + '</h2></div><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>';
+    var h = '<div class="sh-top"><h2>' + (d.id ? 'Editar descenso' : 'Nuevo descenso') + '</h2><button class="x" type="button" data-close="1" aria-label="Cerrar">×</button></div>';
     h += '<div class="f2 two"><label class="fld">FECHA<input class="in" type="date" id="f-date" value="' + esc(d.date) + '"></label><label class="fld">HORA (OPCIONAL)<input class="in" type="time" id="f-time" value="' + esc(d.time) + '"></label></div>';
     h += '<div class="f2 two"><label class="fld">SESIÓN<input class="in" type="number" min="1" inputmode="numeric" id="f-session" value="' + d.session + '"></label><label class="fld">Nº DESCENSO<input class="in" type="number" min="1" inputmode="numeric" id="f-n" value="' + d.n + '"></label></div>';
     var ss = (t.starts || []).slice();
@@ -760,10 +793,8 @@ textarea.in { resize: vertical; min-height: 64px; }
       if (inp) inp.classList.toggle('bad', bad);
       if (s == null) { el.textContent = ''; el.className = 'sec'; return; }
       el.textContent = fmt(s);
-      var cls = 'sec', b = useRef ? st.best[i] : null;
+      var cls = 'sec';
       if (s <= 0 && i > 0) { cls += ' neg'; warn.push(t.splits[i]); }
-      else if (b != null && s <= b + 0.0005) cls += ' best';
-      else if (b != null && s - b <= 0.1) cls += ' near';
       el.className = cls;
     });
     var w = $('f-warn'); if (w) w.textContent = warn.length ? 'Revisa ' + warn.join(', ') + ': el tiempo acumulado no sube respecto al punto anterior.' : '';
@@ -1115,6 +1146,7 @@ textarea.in { resize: vertical; min-height: 64px; }
 
   /* ---------- Eventos ---------- */
   document.addEventListener('click', function (e) {
+    if (UI.runMenu && !(e.target.closest && e.target.closest('.runkebab'))) { UI.runMenu = null; UI.confirmRun = null; if (UI.role) render(); return; }
     if (UI.menu && !(e.target.closest && e.target.closest('.kebab'))) { UI.menu = null; UI.confirmTrack = null; if (UI.role) render(); return; }
     var cr = e.target.closest && e.target.closest('[data-chartrun]');
     if (cr) { openRunById(cr.getAttribute('data-chartrun')); return; }
@@ -1131,6 +1163,9 @@ textarea.in { resize: vertical; min-height: 64px; }
     if (d.logout) { logout(); return; }
     if (d.tab) { UI.tab = d.tab; UI.menu = null; try { history.replaceState(null, '', '#' + d.tab); } catch (x) {} render(); window.scrollTo(0, 0); return; }
     if (d.menu) { UI.menu = UI.menu === d.menu ? null : d.menu; UI.confirmTrack = null; render(); return; }
+    if (d.runmenu !== undefined) { UI.runMenu = UI.runMenu === d.runmenu ? null : d.runmenu; UI.confirmRun = null; render(); return; }
+    if (d.runedit !== undefined) { var er = S.runs[d.runedit]; UI.runMenu = null; UI.confirmRun = null; if (er && t) openEditor(draftFrom(er, t)); else render(); return; }
+    if (d.rundel !== undefined) { if (UI.confirmRun === d.rundel) { UI.confirmRun = null; UI.runMenu = null; delDocs('runs', [d.rundel]); render(); toast('Descenso eliminado'); } else { UI.confirmRun = d.rundel; render(); } return; }
     if (d.new && t) { openEditor(newDraft(t)); return; }
     if (d.run) { openRunById(d.run); return; }
     if (d.close) { closeSheet(); return; }
